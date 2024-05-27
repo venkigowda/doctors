@@ -69,27 +69,32 @@
         <button onclick="setAvailability()">Set Status</button>
     </div>
 
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
     <script>
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-  apiKey: "AIzaSyABc3Y-mu2bWYR6yn98uO7KFLLU4dpTSIY",
-  authDomain: "user-doctor-1f9a3.firebaseapp.com",
-  projectId: "user-doctor-1f9a3",
-  storageBucket: "user-doctor-1f9a3.appspot.com",
-  messagingSenderId: "660737381600",
-  appId: "1:660737381600:web:319efeec267b677df66c85"
-};
+            apiKey: "AIzaSyABc3Y-mu2bWYR6yn98uO7KFLLU4dpTSIY",
+            authDomain: "user-doctor-1f9a3.firebaseapp.com",
+            projectId: "user-doctor-1f9a3",
+            storageBucket: "user-doctor-1f9a3.appspot.com",
+            messagingSenderId: "660737381600",
+            appId: "1:660737381600:web:319efeec267b677df66c85"
+        };
+        
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        var db = firebase.firestore();
+        const db = firebase.firestore();
 
+        // Load Appointments
         function loadAppointments() {
             db.collection("appointments").get().then(function(querySnapshot) {
-                var appointmentsHTML = "";
+                let appointmentsHTML = "";
                 querySnapshot.forEach(function(doc) {
-                    var appointment = doc.data();
-                    var date = new Date(appointment.datetime.seconds * 1000);
-                    var formattedDate = date.toLocaleString("en-IN", {
+                    const appointment = doc.data();
+                    const date = new Date(appointment.datetime.seconds * 1000);
+                    const formattedDate = date.toLocaleString("en-IN", {
                         timeZone: "Asia/Kolkata",
                         hour12: true,
                         weekday: "long",
@@ -115,6 +120,7 @@
             });
         }
 
+        // Update Appointment Status
         function updateStatus(appointmentId, status) {
             db.collection("appointments").doc(appointmentId).update({status: status})
             .then(() => {
@@ -125,9 +131,10 @@
             });
         }
 
+        // Set Availability
         function setAvailability() {
-            var availability = document.getElementById('availability').value;
-            var reason = document.getElementById('reason').value;
+            const availability = document.getElementById('availability').value;
+            const reason = document.getElementById('reason').value;
             db.collection("settings").doc("availability").set({
                 status: availability,
                 reason: reason
@@ -140,8 +147,8 @@
             });
         }
 
+        // Load Appointments on Page Load
         loadAppointments();
     </script>
 </body>
 </html>
-
